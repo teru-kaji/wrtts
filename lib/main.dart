@@ -901,11 +901,11 @@ class _MemberDetailPageState extends State<MemberDetailPage> {
                 padding: EdgeInsets.all(24.0),
                 child: Text(
                   '選択した期のデータがありません。',
-                  // style: TextStyle(
-                  //   color: Colors.red,
-                  //   fontSize: 18,
-                  //   fontWeight: FontWeight.bold,
-                  // ),
+                  style: TextStyle(
+                    color: Colors.red,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               )
                   : Column(
