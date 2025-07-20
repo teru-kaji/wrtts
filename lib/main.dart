@@ -284,6 +284,7 @@ class _MemberSearchPageState extends State<MemberSearchPage> {
   List<Map<String, dynamic>> _members = [];
   bool _isLoading = false;
   bool _hasMore = true;
+  int _loadedCount = 0;
   final int _limit = 100;
   final ScrollController _scrollController = ScrollController();
   bool _hasSearched = false; // 初期ローディング表示制御用
@@ -323,6 +324,7 @@ class _MemberSearchPageState extends State<MemberSearchPage> {
 
     setState(() {
       _members = [];
+      _loadedCount = 0;
       _hasMore = true;
       _hasSearched = true;
     });
