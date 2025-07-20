@@ -11,9 +11,9 @@ void main() async {
   runApp(MyApp(localMembers: membersList));
 }
 
-// メンバー枠構造体
+// 枠情報を持つメンバー構造体
 class CourseMember {
-  final int originalFrame;
+  final int originalFrame; // 元の枠番号（1〜6）
   final Map<String, dynamic> member;
 
   CourseMember({required this.originalFrame, required this.member});
@@ -21,20 +21,26 @@ class CourseMember {
 
 class MyApp extends StatefulWidget {
   final List localMembers;
+
   MyApp({required this.localMembers});
+
   @override
   State<MyApp> createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
   ThemeMode _themeMode = ThemeMode.system;
+
   void _toggleThemeMode() {
     setState(() {
-      if (_themeMode == ThemeMode.light) _themeMode = ThemeMode.dark;
-      else if (_themeMode == ThemeMode.dark) _themeMode = ThemeMode.light;
-      else _themeMode = ThemeMode.light;
+      if (_themeMode == ThemeMode.light) {
+        _themeMode = ThemeMode.dark;
+      } else {
+        _themeMode = ThemeMode.light;
+      }
     });
   }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -71,11 +77,13 @@ class MemberSetPage extends StatefulWidget {
   final VoidCallback? onToggleTheme;
   final ThemeMode themeMode;
   final List localMembers;
+
   MemberSetPage({
     this.onToggleTheme,
     this.themeMode = ThemeMode.system,
     required this.localMembers,
   });
+
   @override
   _MemberSetPageState createState() => _MemberSetPageState();
 }
@@ -96,6 +104,7 @@ class _MemberSetPageState extends State<MemberSetPage> {
         ),
       ),
     );
+
     if (result != null && result['member'] != null) {
       setState(() {
         courseMembers[courseIndex] = CourseMember(
@@ -137,12 +146,48 @@ class _MemberSetPageState extends State<MemberSetPage> {
                   ? Text('未選択')
                   : Row(
                 children: [
-                  Expanded(flex: 1, child: Text('${cm.originalFrame}', overflow: TextOverflow.ellipsis)),
-                  Expanded(flex: 2, child: Text('${cm.member['Number']}', overflow: TextOverflow.ellipsis)),
-                  Expanded(flex: 3, child: Text('${cm.member['Name']}', overflow: TextOverflow.ellipsis)),
-                  Expanded(flex: 1, child: Text('${cm.member['Sex']}' == '2' ? '♀️' : '', textAlign: TextAlign.center)),
-                  Expanded(flex: 2, child: Text('${cm.member['WinPointRate']}', overflow: TextOverflow.ellipsis)),
-                  Expanded(flex: 1, child: Text('${cm.member['Rank']}', overflow: TextOverflow.ellipsis)),
+                  Expanded(
+                    flex: 1,
+                    child: Text(
+                      '${cm.originalFrame}',
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  Expanded(
+                    flex: 2,
+                    child: Text(
+                      '${cm.member['Number']}',
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  Expanded(
+                    flex: 3,
+                    child: Text(
+                      '${cm.member['Name']}',
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  Expanded(
+                    flex: 1,
+                    child: Text(
+                      '${cm.member['Sex']}' == '2' ? '♀️' : '',
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                  Expanded(
+                    flex: 2,
+                    child: Text(
+                      '${cm.member['WinPointRate']}',
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  Expanded(
+                    flex: 1,
+                    child: Text(
+                      '${cm.member['Rank']}',
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
                 ],
               ),
               onTap: () => _showMemberSearchPage(index),
@@ -170,7 +215,7 @@ class _MemberSetPageState extends State<MemberSetPage> {
       ),
       body: DragAndDropLists(
         children: _buildCourseLists(),
-        onItemReorder: (oldItemIndex, oldListIndex, newItemIndex, newListIndex,) {
+        onItemReorder: (oldItemIndex, oldListIndex, newItemIndex, newListIndex) {
           setState(() {
             final moved = courseMembers[oldListIndex];
             courseMembers[oldListIndex] = courseMembers[newListIndex];
@@ -209,11 +254,13 @@ class MemberSearchPage extends StatefulWidget {
   final String? initialRank;
   final String? initialGender;
   final List localMembers;
+
   MemberSearchPage({
     this.initialRank,
     this.initialGender,
     required this.localMembers,
   });
+
   @override
   _MemberSearchPageState createState() => _MemberSearchPageState();
 }
@@ -224,6 +271,7 @@ class _MemberSearchPageState extends State<MemberSearchPage> {
   String? _selectedGender;
   String? _selectedDataTime = '20252';
   String? _selectedRank;
+
   final List<Map<String, String>> _genderList = [
     {'label': '', 'value': ''},
     {'label': '男性', 'value': '1'},
@@ -231,13 +279,15 @@ class _MemberSearchPageState extends State<MemberSearchPage> {
   ];
   final List<String> _dataTimeList = ['', '20252', '20251', '20242', '20021'];
   final List<String> _rankList = ['', 'A1', 'A2', 'B1', 'B2'];
+
   List<Map<String, dynamic>> _members = [];
   bool _isLoading = false;
   bool _hasMore = true;
   int _loadedCount = 0;
   final int _limit = 100;
   final ScrollController _scrollController = ScrollController();
-  bool _hasSearched = false;
+  bool _hasSearched = false; // 初期ローディング表示制御用
+
   @override
   void initState() {
     super.initState();
@@ -245,25 +295,32 @@ class _MemberSearchPageState extends State<MemberSearchPage> {
     _selectedRank = widget.initialRank ?? '';
     _scrollController.addListener(_onScroll);
   }
+
   @override
   void dispose() {
     _scrollController.dispose();
     super.dispose();
   }
+
   void _onScroll() {
     if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 200) {
       _fetchMoreMembers();
     }
   }
+
   void _searchMembers() async {
     if (_nameController.text.isEmpty &&
         _codeController.text.isEmpty &&
         (_selectedGender == null || _selectedGender == '') &&
         (_selectedDataTime == null || _selectedDataTime!.isEmpty) &&
         (_selectedRank == null || _selectedRank!.isEmpty)) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('少なくとも1つの検索条件を入力してください')));
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(
+          SnackBar(content: Text('少なくとも1つの検索条件を入力してください')));
       return;
     }
+
     setState(() {
       _members = [];
       _loadedCount = 0;
@@ -272,34 +329,52 @@ class _MemberSearchPageState extends State<MemberSearchPage> {
     });
     await _fetchMoreMembers();
   }
+
   Future<void> _fetchMoreMembers() async {
     if (_isLoading || !_hasMore) return;
+
     setState(() => _isLoading = true);
+
     List<Map<String, dynamic>> source = widget.localMembers.cast<Map<String, dynamic>>();
-    source = source.where((member) {
-      final matchesName =
-          _nameController.text.isEmpty ||
-              (member['Kana3']?.toString().toLowerCase() ?? '').contains(_nameController.text.toLowerCase());
-      final matchesCode =
-          _codeController.text.isEmpty ||
-              (member['Number']?.toString() ?? '').startsWith(_codeController.text);
-      final matchesGender =
-          (_selectedGender == null || _selectedGender == '') ||
-              member['Sex']?.toString() == _selectedGender;
-      final matchesDataTime =
-          (_selectedDataTime == null || _selectedDataTime!.isEmpty) || member['DataTime']?.toString() == _selectedDataTime;
-      final matchesRank =
-          (_selectedRank == null || _selectedRank!.isEmpty) ||
-              member['Rank']?.toString() == _selectedRank;
-      return matchesName && matchesCode && matchesGender && matchesDataTime && matchesRank;
-    }).toList();
+
+    // 検索条件でフィルタ
+    source =
+        source.where((member) {
+          final matchesName =
+              _nameController.text.isEmpty ||
+                  (member['Kana3']?.toString().toLowerCase() ?? '').contains(
+                    _nameController.text.toLowerCase(),
+                  );
+          final matchesCode =
+              _codeController.text.isEmpty ||
+                  (member['Number']?.toString() ?? '').startsWith(
+                    _codeController.text,
+                  );
+          final matchesGender =
+              (_selectedGender == null || _selectedGender == '') ||
+                  member['Sex']?.toString() == _selectedGender;
+          final matchesDataTime =
+              (_selectedDataTime == null || _selectedDataTime!.isEmpty) ||
+                  member['DataTime']?.toString() == _selectedDataTime;
+          final matchesRank =
+              (_selectedRank == null || _selectedRank!.isEmpty) ||
+                  member['Rank']?.toString() == _selectedRank;
+          return matchesName &&
+              matchesCode &&
+              matchesGender &&
+              matchesDataTime &&
+              matchesRank;
+        }).toList();
+
     final next = source.skip(_members.length).take(_limit).toList();
+
     setState(() {
       if (next.length < _limit) _hasMore = false;
       _members.addAll(next);
       _isLoading = false;
     });
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -344,7 +419,10 @@ class _MemberSearchPageState extends State<MemberSearchPage> {
                       decoration: InputDecoration(
                         labelText: '期',
                         border: OutlineInputBorder(),
-                        contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 6),
+                        contentPadding: EdgeInsets.symmetric(
+                          vertical: 16,
+                          horizontal: 6,
+                        ),
                         isDense: true,
                       ),
                       value: _selectedDataTime,
@@ -370,7 +448,10 @@ class _MemberSearchPageState extends State<MemberSearchPage> {
                       decoration: InputDecoration(
                         labelText: '級別',
                         border: OutlineInputBorder(),
-                        contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 6),
+                        contentPadding: EdgeInsets.symmetric(
+                          vertical: 16,
+                          horizontal: 6,
+                        ),
                         isDense: true,
                       ),
                       value: _selectedRank,
@@ -396,7 +477,10 @@ class _MemberSearchPageState extends State<MemberSearchPage> {
                       decoration: InputDecoration(
                         labelText: '性別',
                         border: OutlineInputBorder(),
-                        contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 6),
+                        contentPadding: EdgeInsets.symmetric(
+                          vertical: 16,
+                          horizontal: 6,
+                        ),
                         isDense: true,
                       ),
                       value: _selectedGender,
@@ -467,6 +551,7 @@ class _MemberSearchPageState extends State<MemberSearchPage> {
                       ),
                     );
                   } else {
+                    // 検索後のみローディングインジケータを表示
                     return Center(child: CircularProgressIndicator());
                   }
                 },
@@ -487,11 +572,12 @@ class _MemberSearchPageState extends State<MemberSearchPage> {
   }
 }
 
-// --- 修正! ResultGraphPage（localMembersを渡す/MemberDetailPage呼出部変更） ---
 class ResultGraphPage extends StatelessWidget {
   final List<CourseMember> members;
   final List localMembers;
+
   ResultGraphPage({required this.members, required this.localMembers});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -511,7 +597,9 @@ class ResultGraphPage extends StatelessWidget {
                       sideTitles: SideTitles(
                         showTitles: true,
                         reservedSize: 42.0,
-                        getTitlesWidget: (value, meta) => Text('${value.toDouble().toStringAsFixed(2)}'),
+                        getTitlesWidget: (value, meta) {
+                          return Text('${value.toDouble().toStringAsFixed(2)}');
+                        },
                       ),
                     ),
                     bottomTitles: AxisTitles(
@@ -520,7 +608,8 @@ class ResultGraphPage extends StatelessWidget {
                         reservedSize: 60,
                         getTitlesWidget: (value, meta) {
                           final i = value.toInt();
-                          if (i < 0 || i >= members.length) return SizedBox.shrink();
+                          if (i < 0 || i >= members.length)
+                            return SizedBox.shrink();
                           final cm = members[i];
                           final member = cm.member;
                           final number = member['Number'] ?? '';
@@ -550,8 +639,12 @@ class ResultGraphPage extends StatelessWidget {
                         },
                       ),
                     ),
-                    topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                    rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                    topTitles: AxisTitles(
+                      sideTitles: SideTitles(showTitles: false),
+                    ),
+                    rightTitles: AxisTitles(
+                      sideTitles: SideTitles(showTitles: false),
+                    ),
                   ),
                   borderData: FlBorderData(show: true),
                   minY: -0.4,
@@ -616,7 +709,9 @@ class ResultGraphPage extends StatelessWidget {
                       sideTitles: SideTitles(
                         showTitles: true,
                         reservedSize: 42.0,
-                        getTitlesWidget: (value, meta) => Text('${value.toInt()}%'),
+                        getTitlesWidget: (value, meta) {
+                          return Text('${value.toInt()}%');
+                        },
                       ),
                     ),
                     bottomTitles: AxisTitles(
@@ -625,7 +720,8 @@ class ResultGraphPage extends StatelessWidget {
                         reservedSize: 60,
                         getTitlesWidget: (value, meta) {
                           final i = value.toInt();
-                          if (i < 0 || i >= members.length) return SizedBox.shrink();
+                          if (i < 0 || i >= members.length)
+                            return SizedBox.shrink();
                           final cm = members[i];
                           final member = cm.member;
                           final number = member['Number'] ?? '';
@@ -634,15 +730,25 @@ class ResultGraphPage extends StatelessWidget {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               Text('${i + 1}', style: TextStyle(fontSize: 12)),
-                              Text('${cm.originalFrame}:$number', style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold)),
+                              Text(
+                                '${cm.originalFrame}:$number',
+                                style: TextStyle(
+                                  fontSize: 11,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
                               Text('$name', style: TextStyle(fontSize: 10)),
                             ],
                           );
                         },
                       ),
                     ),
-                    topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                    rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                    topTitles: AxisTitles(
+                      sideTitles: SideTitles(showTitles: false),
+                    ),
+                    rightTitles: AxisTitles(
+                      sideTitles: SideTitles(showTitles: false),
+                    ),
                   ),
                   borderData: FlBorderData(show: true),
                   minY: 0,
@@ -653,7 +759,10 @@ class ResultGraphPage extends StatelessWidget {
                         x: i,
                         barRods: [
                           BarChartRodData(
-                            toY: (double.tryParse(members[i].member['WinRate12#${i + 1}']) ?? 0) * 100,
+                            toY:
+                            (double.tryParse(
+                              members[i].member['WinRate12#${i + 1}'],
+                            ) ?? 0) * 100,
                             color: Colors.indigo,
                             width: 20,
                             borderRadius: BorderRadius.circular(5),
@@ -669,9 +778,16 @@ class ResultGraphPage extends StatelessWidget {
                       tooltipMargin: 8,
                       getTooltipItem: (group, groupIndex, rod, rodIndex) {
                         final member = members[group.x].member;
-                        final winRate = (double.tryParse(member['WinRate12#${group.x + 1}']) ?? 0) * 100;
-                        final startCountRaw = member['NumberOfEntries#${group.x + 1}'] ?? '0';
-                        final startCount = double.tryParse(startCountRaw.toString())?.toInt() ?? 0;
+                        final winRate =
+                            (double.tryParse(
+                              member['WinRate12#${group.x + 1}'],
+                            ) ?? 0) * 100;
+                        final startCountRaw =
+                            member['NumberOfEntries#${group.x + 1}'] ?? '0';
+                        final startCount =
+                            double.tryParse(
+                              startCountRaw.toString(),
+                            )?.toInt() ?? 0;
                         return BarTooltipItem(
                           '複勝率: ${winRate.toStringAsFixed(1)}%\n進入回数: $startCount回',
                           TextStyle(
@@ -693,31 +809,39 @@ class ResultGraphPage extends StatelessWidget {
   }
 }
 
-// 期コードを日本語表記に変換（既存プロジェクトのものを利用）
+// 期コードを日本語表記に変換する関数
 String formatDataTime(String dataTime) {
   if (dataTime.length != 5) return '不正な形式';
   final year = dataTime.substring(0, 4);
   final term = dataTime.substring(4);
   String termLabel;
   switch (term) {
-    case '1': termLabel = '前期'; break;
-    case '2': termLabel = '後期'; break;
-    default: return '不明な期';
+    case '1':
+      termLabel = '前期';
+      break;
+    case '2':
+      termLabel = '後期';
+      break;
+    default:
+      return '不明な期';
   }
   return '$year年$termLabel';
 }
 
-// --- 不具合修正！MemberDetailPage（localMembersも受け取る／期切替に対応） ---
+// --- MemberDetailPage（データがなければメッセージで告知） ---
 class MemberDetailPage extends StatefulWidget {
   final Map<String, dynamic> member;
   final List localMembers;
   MemberDetailPage({required this.member, required this.localMembers});
+
   @override
   _MemberDetailPageState createState() => _MemberDetailPageState();
 }
+
 class _MemberDetailPageState extends State<MemberDetailPage> {
-  late String? _selectedDataTime;
-  late Map<String, dynamic> _displayMember;
+  String? _selectedDataTime;
+  Map<String, dynamic>? _displayMember;
+  bool _noData = false;
   final List<String> _dataTimeList = ['', '20252', '20251', '20242', '20021'];
 
   @override
@@ -725,6 +849,7 @@ class _MemberDetailPageState extends State<MemberDetailPage> {
     super.initState();
     _selectedDataTime = widget.member['DataTime']?.toString() ?? '';
     _displayMember = widget.member;
+    _noData = false;
   }
 
   void _switchDataTime(String newValue) {
@@ -733,165 +858,280 @@ class _MemberDetailPageState extends State<MemberDetailPage> {
       _displayMember = widget.localMembers
           .cast<Map<String, dynamic>>()
           .firstWhere(
-            (m) => m['Number'] == widget.member['Number'] && m['DataTime'].toString() == newValue,
-        orElse: () => _displayMember,
+            (m) =>
+        m['Number'] == widget.member['Number'] &&
+            m['DataTime'].toString() == newValue,
+        orElse: () => {},
       );
+      _noData = _displayMember == null || _displayMember!.isEmpty;
     });
   }
+
   @override
   Widget build(BuildContext context) {
-    final member = _displayMember;
     return Scaffold(
-      appBar: AppBar(title: Text('${member['Name']}の詳細')),
+      appBar: AppBar(title: Text('${widget.member['Name']}の詳細')),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: SingleChildScrollView(
           child: Column(
             children: [
-              Row(children: [
-                Text('期を選択: '),
-                DropdownButton<String>(
-                  value: _selectedDataTime,
-                  items: _dataTimeList.map((dt) {
-                    return DropdownMenuItem(
-                      value: dt,
-                      child: Text(dt.isEmpty ? '' : formatDataTime(dt)),
-                    );
-                  }).toList(),
-                  onChanged: (newValue) {
-                    if (newValue != null) _switchDataTime(newValue);
-                  },
-                ),
-              ]),
-              SizedBox(height: 16),
-              Image.network(
-                member['Photo'] ?? '',
-                width: 120,
-                height: 120,
-                fit: BoxFit.cover,
-              ),
-              SizedBox(height: 20),
-              // 詳細テーブル1
-              Table(
-                border: TableBorder.all(),
+              Row(
                 children: [
-                  TableRow(children: [
-                    TableCell(
-                      child: Text(' 期  別：${formatDataTime('${member['DataTime']}')}', textAlign: TextAlign.left),
-                    ),
-                    TableCell(
-                      child: Text(' ${member['DataTime']}', textAlign: TextAlign.left),
-                    ),
-                  ]),
-                  TableRow(children: [
-                    TableCell(
-                      child: Text(' 氏  名：${member['Name']}', textAlign: TextAlign.left),
-                    ),
-                    TableCell(
-                      child: Text(' ${member['Kana3']}', textAlign: TextAlign.left),
-                    ),
-                  ]),
-                  TableRow(children: [
-                    TableCell(
-                      child: Text(' 登  番：${member['Number']}', textAlign: TextAlign.left),
-                    ),
-                    TableCell(child: Text('', textAlign: TextAlign.left)),
-                  ]),
-                  TableRow(children: [
-                    TableCell(
-                      child: Text(' 勝  率：${member['WinPointRate']}', textAlign: TextAlign.left),
-                    ),
-                    TableCell(
-                      child: Text(' 複勝率：${(double.parse(member['WinRate12']) * 100).toStringAsFixed(2)}%', textAlign: TextAlign.left),
-                    ),
-                  ]),
-                  TableRow(children: [
-                    TableCell(
-                      child: Text(' 1着数：${member['1stPlaceCount']}', textAlign: TextAlign.left),
-                    ),
-                    TableCell(
-                      child: Text(' 優勝数：${member['NumberOfWins']}', textAlign: TextAlign.left),
-                    ),
-                  ]),
-                  TableRow(children: [
-                    TableCell(
-                      child: Text(' 2着数：${member['2ndPlaceCount']}', textAlign: TextAlign.left),
-                    ),
-                    TableCell(
-                      child: Text(' 優出数：${member['NumberOfFinals']}', textAlign: TextAlign.left),
-                    ),
-                  ]),
-                  TableRow(children: [
-                    TableCell(
-                      child: Text(' 平均ST：${member['StartTiming']}', textAlign: TextAlign.left),
-                    ),
-                    TableCell(
-                      child: Text(' 出走数：${member['NumberOfRace']}', textAlign: TextAlign.left),
-                    ),
-                  ]),
-                  TableRow(children: [
-                    TableCell(
-                      child: Text(' 級  別：${member['Rank']} /${member['RankPast1']}/${member['RankPast2']}/${member['RankPast3']}', textAlign: TextAlign.left),
-                    ),
-                    TableCell(child: Text('', textAlign: TextAlign.left)),
-                  ]),
-                  TableRow(children: [
-                    TableCell(
-                      child: Text(' 年  齢：${member['Age']}', textAlign: TextAlign.left),
-                    ),
-                    TableCell(
-                      child: Text(' 誕生日：${member['GBirthday']}', textAlign: TextAlign.left),
-                    ),
-                  ]),
-                  TableRow(children: [
-                    TableCell(
-                      child: Text(' 身  長：${member['Height']}cm', textAlign: TextAlign.left),
-                    ),
-                    TableCell(
-                      child: Text(' 血液型：${member['Blood']}', textAlign: TextAlign.left),
-                    ),
-                  ]),
-                  TableRow(children: [
-                    TableCell(
-                      child: Text(' 体  重：${member['Weight']}kg', textAlign: TextAlign.left),
-                    ),
-                    TableCell(child: Text('', textAlign: TextAlign.left)),
-                  ]),
-                  TableRow(children: [
-                    TableCell(
-                      child: Text(' 支  部：${member['Blanch']}', textAlign: TextAlign.left),
-                    ),
-                    TableCell(
-                      child: Text(' 出身地：${member['Birthplace']}', textAlign: TextAlign.left),
-                    ),
-                  ]),
+                  Text('期を選択: '),
+                  DropdownButton<String>(
+                    value: _selectedDataTime,
+                    items: _dataTimeList.map((dt) {
+                      return DropdownMenuItem(
+                        value: dt,
+                        child: Text(dt.isEmpty ? '' : formatDataTime(dt)),
+                      );
+                    }).toList(),
+                    onChanged: (newValue) {
+                      if (newValue != null) {
+                        _switchDataTime(newValue);
+                      }
+                    },
+                  ),
                 ],
               ),
-              SizedBox(height: 20),
-              // 詳細テーブル2（全カラム省略せず全て展開）
-              Table(
-                border: TableBorder.all(),
+              SizedBox(height: 16),
+              _noData
+                  ? Padding(
+                padding: EdgeInsets.all(24.0),
+                child: Text(
+                  '選択した期のデータがありません。',
+                  style: TextStyle(
+                    color: Colors.red,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              )
+                  : Column(
                 children: [
-                  TableRow(children: [
-                    TableCell(child: Text('F', textAlign: TextAlign.center)),
-                    TableCell(child: Text('L0', textAlign: TextAlign.center)),
-                    TableCell(child: Text('L1', textAlign: TextAlign.center)),
-                    TableCell(child: Text('K0', textAlign: TextAlign.center)),
-                    TableCell(child: Text('K1', textAlign: TextAlign.center)),
-                    TableCell(child: Text('S0', textAlign: TextAlign.center)),
-                    TableCell(child: Text('S1', textAlign: TextAlign.center)),
-                    TableCell(child: Text('S2', textAlign: TextAlign.center)),
-                  ]),
-                  TableRow(children: [
-                    TableCell(child: Text(member['FCount'].toString(), textAlign: TextAlign.center)),
-                    TableCell(child: Text(member['L0Count'].toString(), textAlign: TextAlign.center)),
-                    TableCell(child: Text(member['L1Count'].toString(), textAlign: TextAlign.center)),
-                    TableCell(child: Text(member['K0Count'].toString(), textAlign: TextAlign.center)),
-                    TableCell(child: Text(member['K1Count'].toString(), textAlign: TextAlign.center)),
-                    TableCell(child: Text(member['S0Count'].toString(), textAlign: TextAlign.center)),
-                    TableCell(child: Text(member['S1Count'].toString(), textAlign: TextAlign.center)),
-                    TableCell(child: Text(member['S2Count'].toString(), textAlign: TextAlign.center)),
-                  ]),
+                  if (_displayMember?['Photo'] != null && _displayMember?['Photo'].isNotEmpty)
+                    Image.network(
+                      _displayMember!['Photo'],
+                      width: 120,
+                      height: 120,
+                      fit: BoxFit.cover,
+                    ),
+                  SizedBox(height: 20),
+                  // --- 詳細テーブル1 ---
+                  Table(
+                    border: TableBorder.all(),
+                    children: [
+                      TableRow(
+                        children: [
+                          TableCell(
+                            child: Text(
+                              ' 期  別：${formatDataTime('${_displayMember?['DataTime']}')}',
+                              textAlign: TextAlign.left,
+                            ),
+                          ),
+                          TableCell(
+                            child: Text(
+                              ' ${_displayMember?['DataTime'] ?? ''}',
+                              textAlign: TextAlign.left,
+                            ),
+                          ),
+                        ],
+                      ),
+                      TableRow(
+                        children: [
+                          TableCell(
+                            child: Text(
+                              ' 氏  名：${_displayMember?['Name'] ?? ''}',
+                              textAlign: TextAlign.left,
+                            ),
+                          ),
+                          TableCell(
+                            child: Text(
+                              ' ${_displayMember?['Kana3'] ?? ''}',
+                              textAlign: TextAlign.left,
+                            ),
+                          ),
+                        ],
+                      ),
+                      TableRow(
+                        children: [
+                          TableCell(
+                            child: Text(
+                              ' 登  番：${_displayMember?['Number'] ?? ''}',
+                              textAlign: TextAlign.left,
+                            ),
+                          ),
+                          TableCell(child: Text('', textAlign: TextAlign.left)),
+                        ],
+                      ),
+                      TableRow(
+                        children: [
+                          TableCell(
+                            child: Text(
+                              ' 勝  率：${_displayMember?['WinPointRate'] ?? ''}',
+                              textAlign: TextAlign.left,
+                            ),
+                          ),
+                          TableCell(
+                            child: Text(
+                              ' 複勝率：${_displayMember?['WinRate12'] != null ? (double.parse(_displayMember!['WinRate12']) * 100).toStringAsFixed(2) + '%' : ''}',
+                              textAlign: TextAlign.left,
+                            ),
+                          ),
+                        ],
+                      ),
+                      TableRow(
+                        children: [
+                          TableCell(
+                            child: Text(
+                              ' 1着数：${_displayMember?['1stPlaceCount'] ?? ''}',
+                              textAlign: TextAlign.left,
+                            ),
+                          ),
+                          TableCell(
+                            child: Text(
+                              ' 優勝数：${_displayMember?['NumberOfWins'] ?? ''}',
+                              textAlign: TextAlign.left,
+                            ),
+                          ),
+                        ],
+                      ),
+                      TableRow(
+                        children: [
+                          TableCell(
+                            child: Text(
+                              ' 2着数：${_displayMember?['2ndPlaceCount'] ?? ''}',
+                              textAlign: TextAlign.left,
+                            ),
+                          ),
+                          TableCell(
+                            child: Text(
+                              ' 優出数：${_displayMember?['NumberOfFinals'] ?? ''}',
+                              textAlign: TextAlign.left,
+                            ),
+                          ),
+                        ],
+                      ),
+                      TableRow(
+                        children: [
+                          TableCell(
+                            child: Text(
+                              ' 平均ST：${_displayMember?['StartTiming'] ?? ''}',
+                              textAlign: TextAlign.left,
+                            ),
+                          ),
+                          TableCell(
+                            child: Text(
+                              ' 出走数：${_displayMember?['NumberOfRace'] ?? ''}',
+                              textAlign: TextAlign.left,
+                            ),
+                          ),
+                        ],
+                      ),
+                      TableRow(
+                        children: [
+                          TableCell(
+                            child: Text(
+                              ' 級  別：${_displayMember?['Rank'] ?? ''} /${_displayMember?['RankPast1'] ?? ''}/${_displayMember?['RankPast2'] ?? ''}/${_displayMember?['RankPast3'] ?? ''}',
+                              textAlign: TextAlign.left,
+                            ),
+                          ),
+                          TableCell(child: Text('', textAlign: TextAlign.left)),
+                        ],
+                      ),
+                      TableRow(
+                        children: [
+                          TableCell(
+                            child: Text(
+                              ' 年  齢：${_displayMember?['Age'] ?? ''}',
+                              textAlign: TextAlign.left,
+                            ),
+                          ),
+                          TableCell(
+                            child: Text(
+                              ' 誕生日：${_displayMember?['GBirthday'] ?? ''}',
+                              textAlign: TextAlign.left,
+                            ),
+                          ),
+                        ],
+                      ),
+                      TableRow(
+                        children: [
+                          TableCell(
+                            child: Text(
+                              ' 身  長：${_displayMember?['Height'] ?? ''}cm',
+                              textAlign: TextAlign.left,
+                            ),
+                          ),
+                          TableCell(
+                            child: Text(
+                              ' 血液型：${_displayMember?['Blood'] ?? ''}',
+                              textAlign: TextAlign.left,
+                            ),
+                          ),
+                        ],
+                      ),
+                      TableRow(
+                        children: [
+                          TableCell(
+                            child: Text(
+                              ' 体  重：${_displayMember?['Weight'] ?? ''}kg',
+                              textAlign: TextAlign.left,
+                            ),
+                          ),
+                          TableCell(child: Text('', textAlign: TextAlign.left)),
+                        ],
+                      ),
+                      TableRow(
+                        children: [
+                          TableCell(
+                            child: Text(
+                              ' 支  部：${_displayMember?['Blanch'] ?? ''}',
+                              textAlign: TextAlign.left,
+                            ),
+                          ),
+                          TableCell(
+                            child: Text(
+                              ' 出身地：${_displayMember?['Birthplace'] ?? ''}',
+                              textAlign: TextAlign.left,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 20),
+                  // --- 詳細テーブル2（例: F, L0, L1, ... S2） ---
+                  Table(
+                    border: TableBorder.all(),
+                    children: [
+                      TableRow(
+                        children: [
+                          TableCell(child: Text('F', textAlign: TextAlign.center)),
+                          TableCell(child: Text('L0', textAlign: TextAlign.center)),
+                          TableCell(child: Text('L1', textAlign: TextAlign.center)),
+                          TableCell(child: Text('K0', textAlign: TextAlign.center)),
+                          TableCell(child: Text('K1', textAlign: TextAlign.center)),
+                          TableCell(child: Text('S0', textAlign: TextAlign.center)),
+                          TableCell(child: Text('S1', textAlign: TextAlign.center)),
+                          TableCell(child: Text('S2', textAlign: TextAlign.center)),
+                        ],
+                      ),
+                      TableRow(
+                        children: [
+                          TableCell(child: Text('${_displayMember?['FCount'] ?? ''}', textAlign: TextAlign.center)),
+                          TableCell(child: Text('${_displayMember?['L0Count'] ?? ''}', textAlign: TextAlign.center)),
+                          TableCell(child: Text('${_displayMember?['L1Count'] ?? ''}', textAlign: TextAlign.center)),
+                          TableCell(child: Text('${_displayMember?['K0Count'] ?? ''}', textAlign: TextAlign.center)),
+                          TableCell(child: Text('${_displayMember?['K1Count'] ?? ''}', textAlign: TextAlign.center)),
+                          TableCell(child: Text('${_displayMember?['S0Count'] ?? ''}', textAlign: TextAlign.center)),
+                          TableCell(child: Text('${_displayMember?['S1Count'] ?? ''}', textAlign: TextAlign.center)),
+                          TableCell(child: Text('${_displayMember?['S2Count'] ?? ''}', textAlign: TextAlign.center)),
+                        ],
+                      ),
+                    ],
+                  ),
                 ],
               ),
             ],
