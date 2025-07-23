@@ -277,7 +277,7 @@ class _MemberSearchPageState extends State<MemberSearchPage> {
     {'label': '男性', 'value': '1'},
     {'label': '女性', 'value': '2'},
   ];
-  final List<String> _dataTimeList = ['', '20252', '20251', '20242', '20021'];
+  final List<String> _dataTimeList = ['', '20252', '20251', '20021'];
   final List<String> _rankList = ['', 'A1', 'A2', 'B1', 'B2'];
 
   List<Map<String, dynamic>> _members = [];
@@ -842,7 +842,7 @@ class _MemberDetailPageState extends State<MemberDetailPage> {
   String? _selectedDataTime;
   Map<String, dynamic>? _displayMember;
   bool _noData = false;
-  final List<String> _dataTimeList = ['', '20252', '20251', '20242', '20021'];
+  final List<String> _dataTimeList = ['', '20252', '20251', '20021'];
 
   @override
   void initState() {
