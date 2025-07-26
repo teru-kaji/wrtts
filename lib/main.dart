@@ -581,7 +581,7 @@ class ResultGraphPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('グラフ表示')),
+      appBar: AppBar(title: Text('スタートフォーメーション')),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -1120,18 +1120,1098 @@ class _MemberDetailPageState extends State<MemberDetailPage> {
                       ),
                       TableRow(
                         children: [
-                          TableCell(child: Text('${_displayMember?['FCount'] ?? ''}', textAlign: TextAlign.center)),
-                          TableCell(child: Text('${_displayMember?['L0Count'] ?? ''}', textAlign: TextAlign.center)),
-                          TableCell(child: Text('${_displayMember?['L1Count'] ?? ''}', textAlign: TextAlign.center)),
-                          TableCell(child: Text('${_displayMember?['K0Count'] ?? ''}', textAlign: TextAlign.center)),
-                          TableCell(child: Text('${_displayMember?['K1Count'] ?? ''}', textAlign: TextAlign.center)),
-                          TableCell(child: Text('${_displayMember?['S0Count'] ?? ''}', textAlign: TextAlign.center)),
-                          TableCell(child: Text('${_displayMember?['S1Count'] ?? ''}', textAlign: TextAlign.center)),
-                          TableCell(child: Text('${_displayMember?['S2Count'] ?? ''}', textAlign: TextAlign.center)),
+                          // F
+                          TableCell(
+                            child: InkWell(
+                              onTap: () {
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    double safeParse(String? value) =>
+                                        double.tryParse(value ?? '') ?? 0;
+                                    final total =
+                                        safeParse(_displayMember?['FalseStart#1']) +
+                                            safeParse(_displayMember?['FalseStart#2']) +
+                                            safeParse(_displayMember?['FalseStart#3']) +
+                                            safeParse(_displayMember?['FalseStart#4']) +
+                                            safeParse(_displayMember?['FalseStart#5']) +
+                                            safeParse(_displayMember?['FalseStart#6']);
+
+                                    return AlertDialog(
+                                      title: Column(
+                                        crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            'フライング失格回数',
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          SizedBox(height: 4),
+                                          Text(
+                                            'このセルはフライングによる失格回数の合計値を示しています。',
+                                            style: TextStyle(
+                                              fontSize: 13,
+                                              color: Colors.grey[700],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      content: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            '合計: ${total == 0 ? 'なし' : total.toStringAsFixed(0)}',
+                                          ),
+                                          SizedBox(height: 8),
+                                          Text(
+                                            '１コース: ${_displayMember?['FalseStart#1'] ?? '0'}',
+                                          ),
+                                          Text(
+                                            '２コース: ${_displayMember?['FalseStart#2'] ?? '0'}',
+                                          ),
+                                          Text(
+                                            '３コース: ${_displayMember?['FalseStart#3'] ?? '0'}',
+                                          ),
+                                          Text(
+                                            '４コース: ${_displayMember?['FalseStart#4'] ?? '0'}',
+                                          ),
+                                          Text(
+                                            '５コース: ${_displayMember?['FalseStart#5'] ?? '0'}',
+                                          ),
+                                          Text(
+                                            '６コース: ${_displayMember?['FalseStart#6'] ?? '0'}',
+                                          ),
+                                          Divider(height: 20, thickness: 1),
+                                          Text(
+                                            'コメント：',
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          Text(
+                                            'フライングをした選手は、そのレースから除外され、該当艇に関する舟券はすべて返還となります。\n'
+                                                'フフライング回数が多くなると、以下のような罰則があります。\n'
+                                                ' 1回：30日間の斡旋停止（レース出場停止）\n'
+                                                ' 2回：60日間の斡旋停止\n'
+                                                ' 3回：90日間の斡旋停止\n'
+                                                ' 4回：180日間の斡旋停止や引退勧告\n',
+                                            style: TextStyle(
+                                              color: Colors.blueGrey,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      actions: [
+                                        TextButton(
+                                          child: Text('閉じる'),
+                                          onPressed:
+                                              () => Navigator.of(context).pop(),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
+                              },
+                              child: Text(
+                                (() {
+                                  double safeParse(String? value) =>
+                                      double.tryParse(value ?? '') ?? 0;
+                                  final total =
+                                      safeParse(_displayMember?['FalseStart#1']) +
+                                          safeParse(_displayMember?['FalseStart#2']) +
+                                          safeParse(_displayMember?['FalseStart#3']) +
+                                          safeParse(_displayMember?['FalseStart#4']) +
+                                          safeParse(_displayMember?['FalseStart#5']) +
+                                          safeParse(_displayMember?['FalseStart#6']);
+                                  if (total == 0) {
+                                    return '';
+                                  } else {
+                                    return '${total.toStringAsFixed(0)}';
+                                  }
+                                })(),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                          ),
+                          // L0
+                          TableCell(
+                            child: InkWell(
+                              onTap: () {
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    double safeParse(String? value) =>
+                                        double.tryParse(value ?? '') ?? 0;
+                                    final total =
+                                        safeParse(
+                                          _displayMember?['LateStartNoResponsibility#1'],
+                                        ) +
+                                            safeParse(
+                                              _displayMember?['LateStartNoResponsibility#2'],
+                                            ) +
+                                            safeParse(
+                                              _displayMember?['LateStartNoResponsibility#3'],
+                                            ) +
+                                            safeParse(
+                                              _displayMember?['LateStartNoResponsibility#4'],
+                                            ) +
+                                            safeParse(
+                                              _displayMember?['LateStartNoResponsibility#5'],
+                                            ) +
+                                            safeParse(
+                                              _displayMember?['LateStartNoResponsibility#6'],
+                                            );
+
+                                    return AlertDialog(
+                                      title: Column(
+                                        crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            '選手責任外の出遅れ回数',
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          SizedBox(height: 4),
+                                          Text(
+                                            'スタートタイミングから1秒以上遅れてスタートラインを通過した場合に適用されます。\n'
+                                                'L0は「選手責任外の出遅れ」を示し、例えばエンジントラブルなど選手自身の過失ではない理由で出遅れた場合に使われます',
+                                            style: TextStyle(
+                                              fontSize: 13,
+                                              color: Colors.grey[700],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      content: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            '合計: ${total == 0 ? 'なし' : total.toStringAsFixed(0)}',
+                                          ),
+                                          SizedBox(height: 8),
+                                          Text(
+                                            '１コース: ${_displayMember?['LateStartNoResponsibility#1'] ?? '0'}',
+                                          ),
+                                          Text(
+                                            '２コース: ${_displayMember?['LateStartNoResponsibility#2'] ?? '0'}',
+                                          ),
+                                          Text(
+                                            '３コース: ${_displayMember?['LateStartNoResponsibility#3'] ?? '0'}',
+                                          ),
+                                          Text(
+                                            '４コース: ${_displayMember?['LateStartNoResponsibility#4'] ?? '0'}',
+                                          ),
+                                          Text(
+                                            '５コース: ${_displayMember?['LateStartNoResponsibility#5'] ?? '0'}',
+                                          ),
+                                          Text(
+                                            '６コース: ${_displayMember?['LateStartNoResponsibility#6'] ?? '0'}',
+                                          ),
+                                          Divider(height: 20, thickness: 1),
+                                          Text(
+                                            'コメント：',
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          Text(
+                                            'L0の場合、事故点は加算されず、勝率や事故率の計算でも出走回数としてカウントされません。\n'
+                                                '一方、L1（選手責任の出遅れ）は事故点が加算され、級別審査にも影響します。',
+                                            style: TextStyle(
+                                              color: Colors.blueGrey,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      actions: [
+                                        TextButton(
+                                          child: Text('閉じる'),
+                                          onPressed:
+                                              () => Navigator.of(context).pop(),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
+                              },
+                              child: Text(
+                                (() {
+                                  double safeParse(String? value) =>
+                                      double.tryParse(value ?? '') ?? 0;
+                                  final total =
+                                      safeParse(
+                                        _displayMember?['LateStartNoResponsibility#1'],
+                                      ) +
+                                          safeParse(
+                                            _displayMember?['LateStartNoResponsibility#2'],
+                                          ) +
+                                          safeParse(
+                                            _displayMember?['LateStartNoResponsibility#3'],
+                                          ) +
+                                          safeParse(
+                                            _displayMember?['LateStartNoResponsibility#4'],
+                                          ) +
+                                          safeParse(
+                                            _displayMember?['LateStartNoResponsibility#5'],
+                                          ) +
+                                          safeParse(
+                                            _displayMember?['LateStartNoResponsibility#6'],
+                                          );
+                                  if (total == 0) {
+                                    return '';
+                                  } else {
+                                    return '${total.toStringAsFixed(0)}';
+                                  }
+                                })(),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                          ),
+                          // L1
+                          TableCell(
+                            child: InkWell(
+                              onTap: () {
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    double safeParse(String? value) =>
+                                        double.tryParse(value ?? '') ?? 0;
+                                    final total =
+                                        safeParse(
+                                          _displayMember?['LateStartOnResponsibility#1'],
+                                        ) +
+                                            safeParse(
+                                              _displayMember?['LateStartOnResponsibility#2'],
+                                            ) +
+                                            safeParse(
+                                              _displayMember?['LateStartOnResponsibility#3'],
+                                            ) +
+                                            safeParse(
+                                              _displayMember?['LateStartOnResponsibility#4'],
+                                            ) +
+                                            safeParse(
+                                              _displayMember?['LateStartOnResponsibility#5'],
+                                            ) +
+                                            safeParse(
+                                              _displayMember?['LateStartOnResponsibility#6'],
+                                            );
+
+                                    return AlertDialog(
+                                      title: Column(
+                                        crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            '選手責任による出遅れ回数',
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          SizedBox(height: 4),
+                                          Text(
+                                            'Lとはスタートタイミングから1秒以上遅れてスタートラインを通過した場合に適用されます。\n'
+                                                'L0は「選手責任の出遅れ」を示します。',
+                                            style: TextStyle(
+                                              fontSize: 13,
+                                              color: Colors.grey[700],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      content: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            '合計: ${total == 0 ? 'なし' : total.toStringAsFixed(0)}',
+                                          ),
+                                          SizedBox(height: 8),
+                                          Text(
+                                            '１コース: ${_displayMember?['LateStartOnResponsibility#1'] ?? '0'}',
+                                          ),
+                                          Text(
+                                            '２コース: ${_displayMember?['LateStartOnResponsibility#2'] ?? '0'}',
+                                          ),
+                                          Text(
+                                            '３コース: ${_displayMember?['LateStartOnResponsibility#3'] ?? '0'}',
+                                          ),
+                                          Text(
+                                            '４コース: ${_displayMember?['LateStartOnResponsibility#4'] ?? '0'}',
+                                          ),
+                                          Text(
+                                            '５コース: ${_displayMember?['LateStartOnResponsibility#5'] ?? '0'}',
+                                          ),
+                                          Text(
+                                            '６コース: ${_displayMember?['LateStartOnResponsibility#6'] ?? '0'}',
+                                          ),
+                                          Divider(height: 20, thickness: 1),
+                                          Text(
+                                            'コメント：',
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          Text(
+                                            '「L1」となった場合、その選手はそのレースを欠場扱いとなり、該当艇が絡む舟券は全額返還されます。\n'
+                                                'また、選手には事故点が加算され、一定期間レースへの出場停止などの罰則が科されます。',
+                                            style: TextStyle(
+                                              color: Colors.blueGrey,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      actions: [
+                                        TextButton(
+                                          child: Text('閉じる'),
+                                          onPressed:
+                                              () => Navigator.of(context).pop(),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
+                              },
+                              child: Text(
+                                (() {
+                                  double safeParse(String? value) =>
+                                      double.tryParse(value ?? '') ?? 0;
+                                  final total =
+                                      safeParse(
+                                        _displayMember?['LateStartOnResponsibility#1'],
+                                      ) +
+                                          safeParse(
+                                            _displayMember?['LateStartOnResponsibility#2'],
+                                          ) +
+                                          safeParse(
+                                            _displayMember?['LateStartOnResponsibility#3'],
+                                          ) +
+                                          safeParse(
+                                            _displayMember?['LateStartOnResponsibility#4'],
+                                          ) +
+                                          safeParse(
+                                            _displayMember?['LateStartOnResponsibility#5'],
+                                          ) +
+                                          safeParse(
+                                            _displayMember?['LateStartOnResponsibility#6'],
+                                          );
+                                  if (total == 0) {
+                                    return '';
+                                  } else {
+                                    return '${total.toStringAsFixed(0)}';
+                                  }
+                                })(),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                          ),
+                          // K0
+                          TableCell(
+                            child: InkWell(
+                              onTap: () {
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    double safeParse(String? value) =>
+                                        double.tryParse(value ?? '') ?? 0;
+                                    final total =
+                                        safeParse(
+                                          _displayMember?['WithdrawNoResponsibility#1'],
+                                        ) +
+                                            safeParse(
+                                              _displayMember?['WithdrawNoResponsibility#2'],
+                                            ) +
+                                            safeParse(
+                                              _displayMember?['WithdrawNoResponsibility#3'],
+                                            ) +
+                                            safeParse(
+                                              _displayMember?['WithdrawNoResponsibility#4'],
+                                            ) +
+                                            safeParse(
+                                              _displayMember?['WithdrawNoResponsibility#5'],
+                                            ) +
+                                            safeParse(
+                                              _displayMember?['WithdrawNoResponsibility#6'],
+                                            );
+
+                                    return AlertDialog(
+                                      title: Column(
+                                        crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            '選手責任外の事前欠場回数',
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          SizedBox(height: 4),
+                                          Text(
+                                            '「K0」は選手の責任によらない理由（例：病気や怪我、不可抗力によるトラブルなど）でレースに出場できなくなった場合に使われます。',
+                                            style: TextStyle(
+                                              fontSize: 13,
+                                              color: Colors.grey[700],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      content: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            '合計: ${total == 0 ? 'なし' : total.toStringAsFixed(0)}',
+                                          ),
+                                          SizedBox(height: 8),
+                                          Text(
+                                            '１コース: ${_displayMember?['WithdrawNoResponsibility#1'] ?? '0'}',
+                                          ),
+                                          Text(
+                                            '２コース: ${_displayMember?['WithdrawNoResponsibility#2'] ?? '0'}',
+                                          ),
+                                          Text(
+                                            '３コース: ${_displayMember?['WithdrawNoResponsibility#3'] ?? '0'}',
+                                          ),
+                                          Text(
+                                            '４コース: ${_displayMember?['WithdrawNoResponsibility#4'] ?? '0'}',
+                                          ),
+                                          Text(
+                                            '５コース: ${_displayMember?['WithdrawNoResponsibility#5'] ?? '0'}',
+                                          ),
+                                          Text(
+                                            '６コース: ${_displayMember?['WithdrawNoResponsibility#6'] ?? '0'}',
+                                          ),
+                                          Divider(height: 20, thickness: 1),
+                                          Text(
+                                            'コメント：',
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          Text(
+                                            'その艇が絡む舟券は全額返還となります。',
+                                            style: TextStyle(
+                                              color: Colors.blueGrey,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      actions: [
+                                        TextButton(
+                                          child: Text('閉じる'),
+                                          onPressed:
+                                              () => Navigator.of(context).pop(),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
+                              },
+                              child: Text(
+                                (() {
+                                  double safeParse(String? value) =>
+                                      double.tryParse(value ?? '') ?? 0;
+                                  final total =
+                                      safeParse(
+                                        _displayMember?['WithdrawNoResponsibility#1'],
+                                      ) +
+                                          safeParse(
+                                            _displayMember?['WithdrawNoResponsibility#2'],
+                                          ) +
+                                          safeParse(
+                                            _displayMember?['WithdrawNoResponsibility#3'],
+                                          ) +
+                                          safeParse(
+                                            _displayMember?['WithdrawNoResponsibility#4'],
+                                          ) +
+                                          safeParse(
+                                            _displayMember?['WithdrawNoResponsibility#5'],
+                                          ) +
+                                          safeParse(
+                                            _displayMember?['WithdrawNoResponsibility#6'],
+                                          );
+                                  if (total == 0) {
+                                    return '';
+                                  } else {
+                                    return '${total.toStringAsFixed(0)}';
+                                  }
+                                })(),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                          ),
+                          // K1
+                          TableCell(
+                            child: InkWell(
+                              onTap: () {
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    double safeParse(String? value) =>
+                                        double.tryParse(value ?? '') ?? 0;
+                                    final total =
+                                        safeParse(
+                                          _displayMember?['WithdrawOnResponsibility#1'],
+                                        ) +
+                                            safeParse(
+                                              _displayMember?['WithdrawOnResponsibility#2'],
+                                            ) +
+                                            safeParse(
+                                              _displayMember?['WithdrawOnResponsibility#3'],
+                                            ) +
+                                            safeParse(
+                                              _displayMember?['WithdrawOnResponsibility#4'],
+                                            ) +
+                                            safeParse(
+                                              _displayMember?['WithdrawOnResponsibility#5'],
+                                            ) +
+                                            safeParse(
+                                              _displayMember?['WithdrawOnResponsibility#6'],
+                                            );
+
+                                    return AlertDialog(
+                                      title: Column(
+                                        crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            '選手責任による事前欠場回数',
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          SizedBox(height: 4),
+                                          Text(
+                                            '「K」は欠場（レースに出場しないこと）を示し、\n'
+                                                '「1」は「選手責任」を表し、選手自身のミスや過失など、選手の責任によってレース前に欠場した場合に使われます。',
+                                            style: TextStyle(
+                                              fontSize: 13,
+                                              color: Colors.grey[700],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      content: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            '合計: ${total == 0 ? 'なし' : total.toStringAsFixed(0)}',
+                                          ),
+                                          SizedBox(height: 8),
+                                          Text(
+                                            '１コース: ${_displayMember?['WithdrawOnResponsibility#1'] ?? '0'}',
+                                          ),
+                                          Text(
+                                            '２コース: ${_displayMember?['WithdrawOnResponsibility#2'] ?? '0'}',
+                                          ),
+                                          Text(
+                                            '３コース: ${_displayMember?['WithdrawOnResponsibility#3'] ?? '0'}',
+                                          ),
+                                          Text(
+                                            '４コース: ${_displayMember?['WithdrawOnResponsibility#4'] ?? '0'}',
+                                          ),
+                                          Text(
+                                            '６コース: ${_displayMember?['WithdrawOnResponsibility#5'] ?? '0'}',
+                                          ),
+                                          Text(
+                                            '６コース: ${_displayMember?['WithdrawOnResponsibility#6'] ?? '0'}',
+                                          ),
+                                          Divider(height: 20, thickness: 1),
+                                          Text(
+                                            'コメント：',
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          Text(
+                                            'K1が記録されると、その選手には事故点（通常10点）が加算され、事故率や級別審査にも影響します。\n'
+                                                'また、K1となった艇が絡む舟券は全額返還されます。',
+                                            style: TextStyle(
+                                              color: Colors.blueGrey,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      actions: [
+                                        TextButton(
+                                          child: Text('閉じる'),
+                                          onPressed:
+                                              () => Navigator.of(context).pop(),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
+                              },
+                              child: Text(
+                                (() {
+                                  double safeParse(String? value) =>
+                                      double.tryParse(value ?? '') ?? 0;
+                                  final total =
+                                      safeParse(
+                                        _displayMember?['WithdrawOnResponsibility#1'],
+                                      ) +
+                                          safeParse(
+                                            _displayMember?['WithdrawOnResponsibility#2'],
+                                          ) +
+                                          safeParse(
+                                            _displayMember?['WithdrawOnResponsibility#3'],
+                                          ) +
+                                          safeParse(
+                                            _displayMember?['WithdrawOnResponsibility#4'],
+                                          ) +
+                                          safeParse(
+                                            _displayMember?['WithdrawOnResponsibility#5'],
+                                          ) +
+                                          safeParse(
+                                            _displayMember?['WithdrawOnResponsibility#6'],
+                                          );
+                                  if (total == 0) {
+                                    return '';
+                                  } else {
+                                    return '${total.toStringAsFixed(0)}';
+                                  }
+                                })(),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                          ),
+                          // S0
+                          TableCell(
+                            child: InkWell(
+                              onTap: () {
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    double safeParse(String? value) =>
+                                        double.tryParse(value ?? '') ?? 0;
+                                    final total =
+                                        safeParse(
+                                          _displayMember?['InvalidNoResponsibility#1'],
+                                        ) +
+                                            safeParse(
+                                              _displayMember?['InvalidNoResponsibility#2'],
+                                            ) +
+                                            safeParse(
+                                              _displayMember?['InvalidNoResponsibility#3'],
+                                            ) +
+                                            safeParse(
+                                              _displayMember?['InvalidNoResponsibility#4'],
+                                            ) +
+                                            safeParse(
+                                              _displayMember?['InvalidNoResponsibility#5'],
+                                            ) +
+                                            safeParse(
+                                              _displayMember?['InvalidNoResponsibility#6'],
+                                            );
+
+                                    return AlertDialog(
+                                      title: Column(
+                                        crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            '選手責任外の失格回数',
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          SizedBox(height: 4),
+                                          Text(
+                                            '「S」は失格（Disqualification）を示し\n'
+                                                '「0」は「選手責任外」を表し、選手の責任によらない理由（例：機械的トラブル、他艇からのもらい事故、不可抗力など）で失格となった場合に使われます',
+                                            style: TextStyle(
+                                              fontSize: 13,
+                                              color: Colors.grey[700],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      content: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            '合計: ${total == 0 ? 'なし' : total.toStringAsFixed(0)}',
+                                          ),
+                                          SizedBox(height: 8),
+                                          Text(
+                                            '１コース: ${_displayMember?['InvalidNoResponsibility#1'] ?? '0'}',
+                                          ),
+                                          Text(
+                                            '２コース: ${_displayMember?['InvalidNoResponsibility#2'] ?? '0'}',
+                                          ),
+                                          Text(
+                                            '３コース: ${_displayMember?['InvalidNoResponsibility#3'] ?? '0'}',
+                                          ),
+                                          Text(
+                                            '４コース: ${_displayMember?['InvalidNoResponsibility#4'] ?? '0'}',
+                                          ),
+                                          Text(
+                                            '５コース: ${_displayMember?['InvalidNoResponsibility#5'] ?? '0'}',
+                                          ),
+                                          Text(
+                                            '６コース: ${_displayMember?['InvalidNoResponsibility#6'] ?? '0'}',
+                                          ),
+                                          Divider(height: 20, thickness: 1),
+                                          Text(
+                                            'コメント：',
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          Text(
+                                            'この場合、事故点や制裁は加算されません。',
+                                            style: TextStyle(
+                                              color: Colors.blueGrey,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      actions: [
+                                        TextButton(
+                                          child: Text('閉じる'),
+                                          onPressed:
+                                              () => Navigator.of(context).pop(),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
+                              },
+                              child: Text(
+                                (() {
+                                  double safeParse(String? value) =>
+                                      double.tryParse(value ?? '') ?? 0;
+                                  final total =
+                                      safeParse(
+                                        _displayMember?['InvalidNoResponsibility#1'],
+                                      ) +
+                                          safeParse(
+                                            _displayMember?['InvalidNoResponsibility#2'],
+                                          ) +
+                                          safeParse(
+                                            _displayMember?['InvalidNoResponsibility#3'],
+                                          ) +
+                                          safeParse(
+                                            _displayMember?['InvalidNoResponsibility#4'],
+                                          ) +
+                                          safeParse(
+                                            _displayMember?['InvalidNoResponsibility#5'],
+                                          ) +
+                                          safeParse(
+                                            _displayMember?['InvalidNoResponsibility#6'],
+                                          );
+                                  if (total == 0) {
+                                    return '';
+                                  } else {
+                                    return '${total.toStringAsFixed(0)}';
+                                  }
+                                })(),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                          ),
+                          // S1
+                          TableCell(
+                            child: InkWell(
+                              onTap: () {
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    double safeParse(String? value) =>
+                                        double.tryParse(value ?? '') ?? 0;
+                                    final total =
+                                        safeParse(
+                                          _displayMember?['InvalidNoResponsibility#1'],
+                                        ) +
+                                            safeParse(
+                                              _displayMember?['InvalidNoResponsibility#2'],
+                                            ) +
+                                            safeParse(
+                                              _displayMember?['InvalidNoResponsibility#3'],
+                                            ) +
+                                            safeParse(
+                                              _displayMember?['InvalidNoResponsibility#4'],
+                                            ) +
+                                            safeParse(
+                                              _displayMember?['InvalidNoResponsibility#5'],
+                                            ) +
+                                            safeParse(
+                                              _displayMember?['InvalidNoResponsibility#6'],
+                                            );
+
+                                    return AlertDialog(
+                                      title: Column(
+                                        crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            '選手責任による失格回数',
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          SizedBox(height: 4),
+                                          Text(
+                                            '「S1」は選手自身の過失やミスによって失格となった場合に使われます。\n'
+                                                '具体的には、転覆、落水、沈没、周回誤認、危険行為など、選手の責任でレース続行ができなくなった場合が該当します。',
+                                            style: TextStyle(
+                                              fontSize: 13,
+                                              color: Colors.grey[700],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      content: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            '合計: ${total == 0 ? 'なし' : total.toStringAsFixed(0)}',
+                                          ),
+                                          SizedBox(height: 8),
+                                          Text(
+                                            '１コース: ${_displayMember?['InvalidNoResponsibility#1'] ?? '0'}',
+                                          ),
+                                          Text(
+                                            '２コース: ${_displayMember?['InvalidNoResponsibility#2'] ?? '0'}',
+                                          ),
+                                          Text(
+                                            '３コース: ${_displayMember?['InvalidNoResponsibility#3'] ?? '0'}',
+                                          ),
+                                          Text(
+                                            '４コース: ${_displayMember?['InvalidNoResponsibility#4'] ?? '0'}',
+                                          ),
+                                          Text(
+                                            '５コース: ${_displayMember?['InvalidNoResponsibility#5'] ?? '0'}',
+                                          ),
+                                          Text(
+                                            '６コース: ${_displayMember?['InvalidNoResponsibility#6'] ?? '0'}',
+                                          ),
+                                          Divider(height: 20, thickness: 1),
+                                          Text(
+                                            'コメント：',
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          Text(
+                                            'S1が記録されると、その選手には事故点（通常10点）が加算され、\n'
+                                                '事故率や級別審査にも影響します。また、舟券は全額返還されます。',
+                                            style: TextStyle(
+                                              color: Colors.blueGrey,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      actions: [
+                                        TextButton(
+                                          child: Text('閉じる'),
+                                          onPressed:
+                                              () => Navigator.of(context).pop(),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
+                              },
+                              child: Text(
+                                (() {
+                                  double safeParse(String? value) =>
+                                      double.tryParse(value ?? '') ?? 0;
+                                  final total =
+                                      safeParse(
+                                        _displayMember?['InvalidNoResponsibility#1'],
+                                      ) +
+                                          safeParse(
+                                            _displayMember?['InvalidNoResponsibility#2'],
+                                          ) +
+                                          safeParse(
+                                            _displayMember?['InvalidNoResponsibility#3'],
+                                          ) +
+                                          safeParse(
+                                            _displayMember?['InvalidNoResponsibility#4'],
+                                          ) +
+                                          safeParse(
+                                            _displayMember?['InvalidNoResponsibility#5'],
+                                          ) +
+                                          safeParse(
+                                            _displayMember?['InvalidNoResponsibility#6'],
+                                          );
+                                  if (total == 0) {
+                                    return '';
+                                  } else {
+                                    return '${total.toStringAsFixed(0)}';
+                                  }
+                                })(),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                          ),
+                          // S2
+                          TableCell(
+                            child: InkWell(
+                              onTap: () {
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    double safeParse(String? value) =>
+                                        double.tryParse(value ?? '') ?? 0;
+                                    final total =
+                                        safeParse(
+                                          _displayMember?['InvalidOnObstruction#1'],
+                                        ) +
+                                            safeParse(
+                                              _displayMember?['InvalidOnObstruction#2'],
+                                            ) +
+                                            safeParse(
+                                              _displayMember?['InvalidOnObstruction#3'],
+                                            ) +
+                                            safeParse(
+                                              _displayMember?['InvalidOnObstruction#4'],
+                                            ) +
+                                            safeParse(
+                                              _displayMember?['InvalidOnObstruction#5'],
+                                            ) +
+                                            safeParse(
+                                              _displayMember?['InvalidOnObstruction#6'],
+                                            );
+
+                                    return AlertDialog(
+                                      title: Column(
+                                        crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            '選手責任による妨害失格回数',
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          SizedBox(height: 4),
+                                          Text(
+                                            '他艇を妨害したことによる選手責任の失格に該当します。\n'
+                                                'S2が記録されると、その選手には事故点が15点加算されます。\n'
+                                                'S2による失格の場合、舟券の全額返還は行われません。',
+                                            style: TextStyle(
+                                              fontSize: 13,
+                                              color: Colors.grey[700],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      content: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            '合計: ${total == 0 ? 'なし' : total.toStringAsFixed(0)}',
+                                          ),
+                                          SizedBox(height: 8),
+                                          Text(
+                                            '1コース: ${_displayMember?['InvalidOnObstruction#1'] ?? '0'}',
+                                          ),
+                                          Text(
+                                            '２コース: ${_displayMember?['InvalidOnObstruction#2'] ?? '0'}',
+                                          ),
+                                          Text(
+                                            '３コース: ${_displayMember?['InvalidOnObstruction#3'] ?? '0'}',
+                                          ),
+                                          Text(
+                                            '４コース: ${_displayMember?['InvalidOnObstruction#4'] ?? '0'}',
+                                          ),
+                                          Text(
+                                            '５コース: ${_displayMember?['InvalidOnObstruction#5'] ?? '0'}',
+                                          ),
+                                          Text(
+                                            '６コース: ${_displayMember?['InvalidOnObstruction#6'] ?? '0'}',
+                                          ),
+                                          Divider(height: 20, thickness: 1),
+                                          Text(
+                                            'コメント：',
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          Text(
+                                            'S2は、事故点も重くペナルティが大きい失格です。',
+                                            style: TextStyle(
+                                              color: Colors.blueGrey,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      actions: [
+                                        TextButton(
+                                          child: Text('閉じる'),
+                                          onPressed:
+                                              () => Navigator.of(context).pop(),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
+                              },
+                              child: Text(
+                                (() {
+                                  double safeParse(String? value) =>
+                                      double.tryParse(value ?? '') ?? 0;
+                                  final total =
+                                      safeParse(
+                                        _displayMember?['InvalidOnObstruction#1'],
+                                      ) +
+                                          safeParse(
+                                            _displayMember?['InvalidOnObstruction#2'],
+                                          ) +
+                                          safeParse(
+                                            _displayMember?['InvalidOnObstruction#3'],
+                                          ) +
+                                          safeParse(
+                                            _displayMember?['InvalidOnObstruction#4'],
+                                          ) +
+                                          safeParse(
+                                            _displayMember?['InvalidOnObstruction#5'],
+                                          ) +
+                                          safeParse(
+                                            _displayMember?['InvalidOnObstruction#6'],
+                                          );
+                                  if (total == 0) {
+                                    return '';
+                                  } else {
+                                    return '${total.toStringAsFixed(0)}';
+                                  }
+                                })(),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                          ),
                         ],
                       ),
                     ],
                   ),
+
+
+
+
+
+
+
+                  
                 ],
               ),
             ],
