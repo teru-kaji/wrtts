@@ -581,7 +581,7 @@ class ResultGraphPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('スタートフォーメーション')),
+      appBar: AppBar(title: Text('Start Fromation')),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -678,17 +678,24 @@ class ResultGraphPage extends StatelessWidget {
                   barTouchData: BarTouchData(
                     enabled: true,
                     touchTooltipData: BarTouchTooltipData(
-                      tooltipBgColor: Colors.black87,
+                      tooltipBgColor: Colors.white,
                       tooltipPadding: EdgeInsets.all(8),
-                      tooltipMargin: -70,
+                      tooltipMargin: -120,
                       getTooltipItem: (group, groupIndex, rod, rodIndex) {
                         final startTimeValue = rod.toY.abs().toStringAsFixed(2);
+                        final member = members[group.x].member;
+                        final startCountRaw =
+                            member['NumberOfEntries#${group.x + 1}'] ?? '0';
+                        final startCount =
+                            double.tryParse(
+                              startCountRaw.toString(),
+                            )?.toInt() ?? 0;
 
                         return BarTooltipItem(
-                          'Sタイミング: ${startTimeValue}S',
-
+                          'Sタイム: ${startTimeValue}\n'
+                          '進入回数: ${startCount}回',
                           TextStyle(
-                            color: Colors.white,
+                            color: Colors.black,
                             fontWeight: FontWeight.bold,
                             fontSize: 14,
                           ),
@@ -775,7 +782,7 @@ class ResultGraphPage extends StatelessWidget {
                   barTouchData: BarTouchData(
                     enabled: true,
                     touchTooltipData: BarTouchTooltipData(
-                      tooltipBgColor: Colors.black87,
+                      tooltipBgColor: Colors.white,
                       tooltipPadding: EdgeInsets.all(8),
                       tooltipMargin: 8,
                       getTooltipItem: (group, groupIndex, rod, rodIndex) {
@@ -791,9 +798,10 @@ class ResultGraphPage extends StatelessWidget {
                               startCountRaw.toString(),
                             )?.toInt() ?? 0;
                         return BarTooltipItem(
-                          '複勝率: ${winRate.toStringAsFixed(1)}%\n進入回数: $startCount回',
+                          '複勝率: ${winRate.toStringAsFixed(1)}%\n'
+                          '進入回数: $startCount回',
                           TextStyle(
-                            color: Colors.white,
+                            color: Colors.black,
                             fontWeight: FontWeight.bold,
                             fontSize: 14,
                           ),
