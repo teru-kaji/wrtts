@@ -683,8 +683,10 @@ class ResultGraphPage extends StatelessWidget {
                       tooltipMargin: -70,
                       getTooltipItem: (group, groupIndex, rod, rodIndex) {
                         final startTimeValue = rod.toY.abs().toStringAsFixed(2);
+
                         return BarTooltipItem(
-                          '$startTimeValue',
+                          'Sタイミング: ${startTimeValue}S',
+
                           TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
@@ -809,24 +811,6 @@ class ResultGraphPage extends StatelessWidget {
   }
 }
 
-// 期コードを日本語表記に変換する関数
-String formatDataTime(String dataTime) {
-  if (dataTime.length != 5) return '不正な形式';
-  final year = dataTime.substring(0, 4);
-  final term = dataTime.substring(4);
-  String termLabel;
-  switch (term) {
-    case '1':
-      termLabel = '前期';
-      break;
-    case '2':
-      termLabel = '後期';
-      break;
-    default:
-      return '不明な期';
-  }
-  return '$year年$termLabel';
-}
 
 // --- MemberDetailPage（データがなければメッセージで告知） ---
 class MemberDetailPage extends StatefulWidget {
@@ -2204,14 +2188,350 @@ class _MemberDetailPageState extends State<MemberDetailPage> {
                       ),
                     ],
                   ),
+                  SizedBox(height: 20),
+                  //
+                  //
+                  Text('コース別複勝率(%)'),
+                  Container(
+                    height: 220,
+                    child: BarChart(
+                      BarChartData(
+                        titlesData: FlTitlesData(
+                          rightTitles: AxisTitles(
+                            sideTitles: SideTitles(showTitles: false),
+                          ),
+                          leftTitles: AxisTitles(
+                            sideTitles: SideTitles(
+                              showTitles: true,
+                              reservedSize: 42.0,
+                              getTitlesWidget: (value, meta) {
+                                return Text('${value.toInt()}%');
+                              },
+                            ),
+                          ),
+                          bottomTitles: AxisTitles(
+                            sideTitles: SideTitles(
+                              showTitles: true,
+                              reservedSize: 50,
+                              getTitlesWidget: (value, meta) {
+                                return Text('${value.toInt()}');
+                              },
+                            ),
+                          ),
+                          topTitles: AxisTitles(
+                            sideTitles: SideTitles(showTitles: false),
+                          ),
+                        ),
+                        borderData: FlBorderData(show: true),
+                        maxY: 100,
+                        barGroups: [
+                          for (int i = 1; i <= 6; i++)
+                            BarChartGroupData(
+                              x: i,
+                              barRods: [
+                                BarChartRodData(
+                                  toY:
+                                  double.parse(_displayMember?['WinRate12#$i']) *
+                                      100,
+                                  color: Colors.indigo.withOpacity(0.9),
+                                  width: 20,
+                                  borderRadius: BorderRadius.circular(5),
+                                ),
+                              ],
+                            ),
+                        ],
+                        barTouchData: BarTouchData(
+                          enabled: true,
+                          touchTooltipData: BarTouchTooltipData(
+                            tooltipBgColor: Colors.white,
+                            // 古いバージョンはこちら
+                            // getTooltipColor: (_) => Colors.white, // 背景色
+                            tooltipMargin: 0,
+                            // tooltipBorderRadius: BorderRadius.circular(8),
+                            tooltipRoundedRadius: 8,
+                            // 代わりにこちらを使用
+                            tooltipPadding: EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 12,
+                            ),
+                            getTooltipItem: (group, groupIndex, rod, rodIndex) {
+                              final course = group.x;
+                              final winRate = rod.toY.toStringAsFixed(1);
 
+                              // 進入回数を整数で表示
+                              final entriesRaw =
+                                  _displayMember?['NumberOfEntries#$course'] ?? '0';
+                              final entries =
+                                  double.tryParse(entriesRaw.toString())?.toInt() ??
+                                      0;
 
+                              return BarTooltipItem(
+                                'コース: $course\n'
+                                    '複勝率: $winRate%\n'
+                                    '進入回数: ${entries}回',
+                                const TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15,
+                                  height: 1.4,
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
 
+                  //
+                  //
+                  Text('コース別１、２、３着回数'),
+                  SizedBox(height: 8),
+                  // --- 凡例を追加 ---
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center, // ここを追加
+                    children: [
+                      _LegendItem(color: Colors.indigo, label: '1着'),
+                      SizedBox(width: 16),
+                      _LegendItem(color: Colors.blue, label: '2着'),
+                      SizedBox(width: 16),
+                      _LegendItem(color: Colors.lightBlueAccent, label: '3着'),
+                    ],
+                  ),
+                  Container(
+                    height: 220,
+                    child: BarChart(
+                      BarChartData(
+                        titlesData: FlTitlesData(
+                          rightTitles: AxisTitles(
+                            sideTitles: SideTitles(showTitles: false),
+                          ),
+                          leftTitles: AxisTitles(
+                            sideTitles: SideTitles(
+                              showTitles: true,
+                              reservedSize: 42.0,
+                              getTitlesWidget: (value, meta) {
+                                return Text('${value.toInt()}回');
+                              },
+                            ),
+                          ),
+                          bottomTitles: AxisTitles(
+                            sideTitles: SideTitles(
+                              showTitles: true,
+                              reservedSize: 50,
+                              getTitlesWidget: (value, meta) {
+                                return Text('${value.toInt()}');
+                              },
+                            ),
+                          ),
+                          topTitles: AxisTitles(
+                            sideTitles: SideTitles(showTitles: false),
+                          ),
+                        ),
+                        borderData: FlBorderData(show: true),
+                        maxY: 50,
+                        barGroups: [
+                          for (int i = 1; i <= 6; i++)
+                            BarChartGroupData(
+                              x: i,
+                              barRods: [
+                                BarChartRodData(
+                                  toY:
+                                  double.parse(_displayMember?['1stPlace#$i']) +
+                                      double.parse(_displayMember?['2ndPlace#$i']) +
+                                      double.parse(_displayMember?['3rdPlace#$i']),
+                                  width: 20,
+                                  borderRadius: BorderRadius.circular(5),
+                                  rodStackItems: [
+                                    BarChartRodStackItem(
+                                      0,
+                                      double.parse(_displayMember?['1stPlace#$i']),
+                                      Colors.indigo, // 1着
+                                    ),
+                                    BarChartRodStackItem(
+                                      double.parse(_displayMember?['1stPlace#$i']),
+                                      double.parse(_displayMember?['1stPlace#$i']) +
+                                          double.parse(
+                                            _displayMember?['2ndPlace#$i'],
+                                          ),
+                                      Colors.lightBlue, // 2着
+                                    ),
+                                    BarChartRodStackItem(
+                                      double.parse(_displayMember?['1stPlace#$i']) +
+                                          double.parse(
+                                            _displayMember?['2ndPlace#$i'],
+                                          ),
+                                      double.parse(_displayMember?['1stPlace#$i']) +
+                                          double.parse(
+                                            _displayMember?['2ndPlace#$i'],
+                                          ) +
+                                          double.parse(
+                                            _displayMember?['3rdPlace#$i'],
+                                          ),
+                                      Colors.lightBlueAccent, // 3着
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                        ],
+                        barTouchData: BarTouchData(
+                          enabled: true,
+                          touchTooltipData: BarTouchTooltipData(
+                            tooltipBgColor: Colors.white,
+                            // 古いバージョンはこちら
+                            // getTooltipColor: (_) => Colors.white, // 背景色
+                            tooltipMargin: 0,
+                            // tooltipBorderRadius: BorderRadius.circular(8),
+                            tooltipRoundedRadius: 8,
+                            // 代わりにこちらを使用
+                            tooltipPadding: EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 12,
+                            ),
+                            getTooltipItem: (group, groupIndex, rod, rodIndex) {
+                              final course = group.x;
+                              final place123 = rod.toY.toStringAsFixed(0);
 
+                              // 進入回数を整数で表示
+                              final entriesRaw =
+                                  _displayMember?['NumberOfEntries#$course'] ?? '0';
+                              final entries =
+                                  double.tryParse(entriesRaw.toString())?.toInt() ??
+                                      0;
 
+                              return BarTooltipItem(
+                                'コース: $course\n'
+                                    '123着: ${place123}回\n'
+                                    '進入回数: ${entries}回',
+                                const TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15,
+                                  height: 1.4,
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  //
+                  //              Text('スタートタイミング/コース'),
+                  Text('スタートタイミング/コース'),
+                  SizedBox(height: 8),
+                  Container(
+                    height: 220,
+                    child: BarChart(
+                      BarChartData(
+                        titlesData: FlTitlesData(
+                          rightTitles: AxisTitles(
+                            sideTitles: SideTitles(showTitles: false),
+                          ),
+                          leftTitles: AxisTitles(
+                            sideTitles: SideTitles(
+                              showTitles: true,
+                              reservedSize: 42.0,
+                              getTitlesWidget: (value, meta) {
+                                return Text(
+                                  '${value.toDouble().toStringAsFixed(2)}',
+                                );
+                              },
+                            ),
+                          ),
+                          bottomTitles: AxisTitles(
+                            sideTitles: SideTitles(
+                              showTitles: true,
+                              reservedSize: 50,
+                              getTitlesWidget: (value, meta) {
+                                return Text('${value.toInt()}');
+                              },
+                            ),
+                          ),
+                          topTitles: AxisTitles(
+                            sideTitles: SideTitles(showTitles: false),
+                          ),
+                        ),
+                        borderData: FlBorderData(show: true),
+                        maxY: 0,
+                        minY: -0.4,
+                        barGroups: [
+                          for (int i = 1; i <= 6; i++)
+                            BarChartGroupData(
+                              x: i,
+                              barRods: [
+                                BarChartRodData(
+                                  toY:
+                                  double.parse(_displayMember?['StartTime#$i']) *
+                                      -1,
+                                  color: Colors.transparent,
+                                  width: 20,
+                                  borderRadius: BorderRadius.circular(0),
+                                  rodStackItems: [
+                                    BarChartRodStackItem(
+                                      0,
+                                      double.parse(_displayMember?['StartTime#$i']) *
+                                          -1,
+                                      Colors.transparent,
+                                    ),
+                                    BarChartRodStackItem(
+                                      double.parse(_displayMember?['StartTime#$i']) *
+                                          -1,
+                                      double.parse(_displayMember?['StartTime#$i']) *
+                                          -1 +
+                                          0.02,
+                                      Colors.red,
+                                    ),
+                                  ],
+                                ),
+                              ],
+                              // showingTooltipIndicators: [0], // これでツールチップが有効
+                            ),
+                        ],
+                        barTouchData: BarTouchData(
+                          enabled: true,
+                          touchTooltipData: BarTouchTooltipData(
+                            tooltipBgColor: Colors.white,
+                            // 古いバージョンはこちら
+                            // getTooltipColor: (_) => Colors.white, // 背景色
+                            tooltipMargin: -120,
+                            // tooltipBorderRadius: BorderRadius.circular(8),
+                            tooltipRoundedRadius: 8,
+                            // 代わりにこちらを使用
+                            tooltipPadding: EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 12,
+                            ),
+                            getTooltipItem: (group, groupIndex, rod, rodIndex) {
+                              final course = group.x;
+                              final startTime = rod.toY.toStringAsFixed(2);
 
+                              // 進入回数を整数で表示
+                              final entriesRaw =
+                                  _displayMember?['NumberOfEntries#$course'] ?? '0';
+                              final entries =
+                                  double.tryParse(entriesRaw.toString())?.toInt() ??
+                                      0;
 
-                  
+                              return BarTooltipItem(
+                                'コース: $course\n'
+                                    'Sタイム: $startTime\n'
+                                    '進入回数: ${entries}回',
+                                const TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15,
+                                  height: 1.4,
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+
                 ],
               ),
             ],
@@ -2220,4 +2540,48 @@ class _MemberDetailPageState extends State<MemberDetailPage> {
       ),
     );
   }
+}
+//
+class _LegendItem extends StatelessWidget {
+  final Color color;
+  final String label;
+
+  const _LegendItem({required this.color, required this.label});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Container(
+          width: 16,
+          height: 16,
+          decoration: BoxDecoration(
+            color: color,
+            borderRadius: BorderRadius.circular(4),
+            border: Border.all(color: Colors.black12),
+          ),
+        ),
+        SizedBox(width: 4),
+        Text(label, style: TextStyle(fontSize: 14)),
+      ],
+    );
+  }
+}
+// 期コードを日本語表記に変換する関数
+String formatDataTime(String dataTime) {
+  if (dataTime.length != 5) return '不正な形式';
+  final year = dataTime.substring(0, 4);
+  final term = dataTime.substring(4);
+  String termLabel;
+  switch (term) {
+    case '1':
+      termLabel = '前期';
+      break;
+    case '2':
+      termLabel = '後期';
+      break;
+    default:
+      return '不明な期';
+  }
+  return '$year年$termLabel';
 }
