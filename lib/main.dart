@@ -140,59 +140,38 @@ class _MemberSetPageState extends State<MemberSetPage> {
           ],
         ),
         children: [
+
           DragAndDropItem(
             child: ListTile(
               title: cm == null
                   ? Text('未選択')
-                  : Row(
+                  : Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Expanded(
-                    flex: 1,
-                    child: Text(
-                      '${cm.originalFrame}',
-                      overflow: TextOverflow.ellipsis,
-                    ),
+                  Row(
+                    children: [
+                      Expanded(flex: 1, child: Text('${cm.originalFrame}')),
+                      Expanded(flex: 2, child: Text('${cm.member['Number']}')),
+                      Expanded(flex: 4, child: Text('${cm.member['Name']}')),
+                      Expanded(flex: 2, child: Text('${cm.member['WinPointRate']}')),
+                      Expanded(flex: 1, child: Text('${cm.member['Rank']}')),
+                      Expanded(flex: 1, child: Text('${cm.member['Sex']}' == '2' ? '♀️' : '', textAlign: TextAlign.center)),
+                    ],
                   ),
-                  Expanded(
-                    flex: 2,
-                    child: Text(
-                      '${cm.member['Number']}',
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
-                  Expanded(
-                    flex: 3,
-                    child: Text(
-                      '${cm.member['Name']}',
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
-                  Expanded(
-                    flex: 1,
-                    child: Text(
-                      '${cm.member['Sex']}' == '2' ? '♀️' : '',
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                  Expanded(
-                    flex: 2,
-                    child: Text(
-                      '${cm.member['WinPointRate']}',
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
-                  Expanded(
-                    flex: 1,
-                    child: Text(
-                      '${cm.member['Rank']}',
-                      overflow: TextOverflow.ellipsis,
-                    ),
+                  SizedBox(height: 4),
+                  Row(
+                    children: [
+                      Expanded(flex: 3, child: Text('')),
+                      Expanded(flex: 4, child: Text('${cm.member['Kana3'] ?? ''}')),
+                      Expanded(flex: 2, child: Text('${cm.member['Age'] ?? ''}才')),
+                      Expanded(flex: 2, child: Text(' ${cm.member['Blanch'] ?? ''}')),
+                    ],
                   ),
                 ],
               ),
               onTap: () => _showMemberSearchPage(index),
             ),
-          ),
+          )
         ],
       );
     });
