@@ -301,7 +301,7 @@ class _MemberSearchPageState extends State<MemberSearchPage> {
 
     setState(() {
       _members = [];
-      _loadedCount = 0;
+    //  _loadedCount = 0;
       _hasMore = true;
       _hasSearched = true;
     });
