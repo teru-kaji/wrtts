@@ -563,7 +563,7 @@ class ResultGraphPage extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            SizedBox(height: 16),
+            SizedBox(height: 40),
             Text('スタートタイミング'),
             Container(
               height: 250,
