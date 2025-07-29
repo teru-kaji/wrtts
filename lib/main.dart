@@ -2219,7 +2219,7 @@ class _MemberDetailPageState extends State<MemberDetailPage> {
                                   toY:
                                   double.parse(_displayMember?['WinRate12#$i']) *
                                       100,
-                                  color: Colors.indigo.withOpacity(0.9),
+                                  color: Colors.indigo,
                                   width: 20,
                                   borderRadius: BorderRadius.circular(5),
                                 ),
