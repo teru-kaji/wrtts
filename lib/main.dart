@@ -140,7 +140,6 @@ class _MemberSetPageState extends State<MemberSetPage> {
           ],
         ),
         children: [
-
           DragAndDropItem(
             child: ListTile(
               title: cm == null
