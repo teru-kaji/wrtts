@@ -118,6 +118,14 @@ class _MemberSetPageState extends State<MemberSetPage> {
   }
 
   List<DragAndDropList> _buildCourseLists() {
+    List<Color> frameColors = [
+      Colors.white,          // 1枠: 白
+      Colors.black,          // 2枠: 黒
+      Colors.red,            // 3枠: 赤
+      Colors.blue,           // 4枠: 青
+      Colors.yellow.shade600,// 5枠: 黄
+      Colors.green,          // 6枠: 緑
+    ];
     return List.generate(6, (index) {
       final cm = courseMembers[index];
       return DragAndDropList(
@@ -149,7 +157,26 @@ class _MemberSetPageState extends State<MemberSetPage> {
                 children: [
                   Row(
                     children: [
-                      Expanded(flex: 1, child: Text('${cm.originalFrame}')),
+                      // Expanded(flex: 1, child: Text('${cm.originalFrame}')),
+                      Expanded(
+                        flex: 1,
+                        child: Container(
+                          alignment: Alignment.center,             // テキスト中央
+                          padding: EdgeInsets.symmetric(horizontal: 4, vertical: 2), // お好みで調整
+                          decoration: BoxDecoration(
+                            color: frameColors[(cm.originalFrame - 1).clamp(0,5)],
+                            borderRadius: BorderRadius.circular(4), // 小さい角丸（お好みで）
+                            border: Border.all(color: Colors.black12),
+                          ),
+                          child: Text(
+                            '${cm.originalFrame}',
+                            style: TextStyle(
+                              color: (cm.originalFrame == 2) ? Colors.white : Colors.black, // 黒枠は白字推奨
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
                       Expanded(flex: 2, child: Text('${cm.member['Number']}')),
                       Expanded(flex: 4, child: Text('${cm.member['Name']}')),
                       Expanded(flex: 2, child: Text('${cm.member['WinPointRate']}')),
@@ -514,9 +541,9 @@ class _MemberSearchPageState extends State<MemberSearchPage> {
                           children: [
                             Expanded(flex: 2, child: Text(member['Number'] ?? 'No number')),
                             Expanded(flex: 3, child: Text('${member['Name'] ?? 'No name'}')),
-                            Expanded(flex: 1, child: Text(member['Sex'] == '2' ? '♀️' : '')),
                             Expanded(flex: 2, child: Text(member['WinPointRate'] ?? 'No Data')),
                             Expanded(flex: 1, child: Text(member['Rank'] ?? 'No Data', style: TextStyle(fontWeight: (member['Rank'] == 'A1') ? FontWeight.bold : FontWeight.normal))),
+                            Expanded(flex: 1, child: Text(member['Sex'] == '2' ? '♀️' : '')),
                           ],
                         ),
                         onTap: () {
