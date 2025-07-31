@@ -178,7 +178,7 @@ class _MemberSetPageState extends State<MemberSetPage> {
                         ),
                       ),
                       Expanded(flex: 2, child: Text('${cm.member['Number']}')),
-                      Expanded(flex: 4, child: Text('${cm.member['Name']}')),
+                      Expanded(flex: 6, child: Text('${cm.member['Name']}')),
                       Expanded(flex: 2, child: Text('${cm.member['WinPointRate']}')),
                       Expanded(flex: 1, child: Text('${cm.member['Rank']}')),
                       Expanded(flex: 1, child: Text('${cm.member['Sex']}' == '2' ? '♀️' : '', textAlign: TextAlign.center)),
@@ -188,7 +188,7 @@ class _MemberSetPageState extends State<MemberSetPage> {
                   Row(
                     children: [
                       Expanded(flex: 3, child: Text('')),
-                      Expanded(flex: 4, child: Text('${cm.member['Kana3'] ?? ''}')),
+                      Expanded(flex: 6, child: Text('${cm.member['Kana3'] ?? ''}')),
                       Expanded(flex: 2, child: Text('${cm.member['Age'] ?? ''}才')),
                       Expanded(flex: 2, child: Text(' ${cm.member['Blanch'] ?? ''}')),
                     ],
@@ -540,7 +540,7 @@ class _MemberSearchPageState extends State<MemberSearchPage> {
                         title: Row(
                           children: [
                             Expanded(flex: 2, child: Text(member['Number'] ?? 'No number')),
-                            Expanded(flex: 3, child: Text('${member['Name'] ?? 'No name'}')),
+                            Expanded(flex: 6, child: Text('${member['Name'] ?? 'No name'}')),
                             Expanded(flex: 2, child: Text(member['WinPointRate'] ?? 'No Data')),
                             Expanded(flex: 1, child: Text(member['Rank'] ?? 'No Data', style: TextStyle(fontWeight: (member['Rank'] == 'A1') ? FontWeight.bold : FontWeight.normal))),
                             Expanded(flex: 1, child: Text(member['Sex'] == '2' ? '♀️' : '')),
