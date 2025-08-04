@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:convert';
-import 'package:flutter/services.dart' show rootBundle;
+// import 'package:flutter/services.dart' show rootBundle;
 import 'package:fl_chart/fl_chart.dart';
 import 'package:drag_and_drop_lists/drag_and_drop_lists.dart';
 import 'package:flutter/services.dart';
@@ -704,12 +704,12 @@ class ResultGraphPage extends StatelessWidget {
                       );
                     }
                     // 2連単・3連単選手名
-                    final n1 = members[0].member['Name'] ?? '';
-                    final n2 = members[1].member['Name'] ?? '';
-                    final n3 = members[2].member['Name'] ?? '';
-                    final n4 = members[3].member['Name'] ?? '';
-                    final n5 = members[4].member['Name'] ?? '';
-                    final n6 = members[5].member['Name'] ?? '';
+                    // final n1 = members[0].member['Name'] ?? '';
+                    // final n2 = members[1].member['Name'] ?? '';
+                    // final n3 = members[2].member['Name'] ?? '';
+                    // final n4 = members[3].member['Name'] ?? '';
+                    // final n5 = members[4].member['Name'] ?? '';
+                    // final n6 = members[5].member['Name'] ?? '';
                     final String dialogText = [
                       '以下の競艇出走表から、2連単、3連単を各３点予想してください。',
                       ...table,
