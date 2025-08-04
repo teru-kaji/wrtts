@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:fl_chart/fl_chart.dart';
 import 'package:drag_and_drop_lists/drag_and_drop_lists.dart';
+import 'package:flutter/services.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -687,6 +688,60 @@ class ResultGraphPage extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
+            // ResultGraphPage の build メソッドの child: Column の children リストにボタンを追加
+            ElevatedButton(
+              child: Text('AIプロンプト'),
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (context) {
+                    // ダイアログに表示するテキストを組み立てる例
+                    final List<String> table = [];
+                    for (int i = 0; i < 6; i++) {
+                      final m = members[i].member;
+                      table.add(
+                          '${i + 1}コース ${members[i].originalFrame}枠 名前:${m['Name'] ?? ''} 得点率:${m['WinPointRate'] ?? ''} 複勝率:${((double.tryParse(m['WinRate12#${i + 1}'] ?? '0') ?? 0) * 100).toStringAsFixed(0)}%'
+                      );
+                    }
+                    // 2連単・3連単選手名
+                    final n1 = members[0].member['Name'] ?? '';
+                    final n2 = members[1].member['Name'] ?? '';
+                    final n3 = members[2].member['Name'] ?? '';
+                    final n4 = members[3].member['Name'] ?? '';
+                    final n5 = members[4].member['Name'] ?? '';
+                    final n6 = members[5].member['Name'] ?? '';
+                    final String dialogText = [
+                      '以下の競艇出走表から、2連単、3連単を各３点予想してください。',
+                      ...table,
+                      '',
+                    ].join('\n');
+
+                    return AlertDialog(
+                      title: Text('以下の競艇出走表から、2連単、3連単を各３点予想してください。'),
+                      content: SingleChildScrollView(
+                        child: SelectableText(dialogText), // 選択も可能
+                      ),
+                      actions: [
+                        TextButton(
+                          child: Text('コピー'),
+                          onPressed: () async {
+                            await Clipboard.setData(ClipboardData(text: dialogText));
+                            ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text('クリップボードにコピーしました'))
+                            );
+                          },
+                        ),
+                        TextButton(
+                          child: Text('閉じる'),
+                          onPressed: () => Navigator.of(context).pop(),
+                        ),
+                      ],
+                    );
+                  },
+                );
+              },
+            ),
+
             SizedBox(height: 40),
             Text('スタートタイミング'),
             Container(
