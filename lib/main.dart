@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'dart:convert';
-// import 'package:flutter/services.dart' show rootBundle;
 import 'package:fl_chart/fl_chart.dart';
 import 'package:drag_and_drop_lists/drag_and_drop_lists.dart';
 import 'package:flutter/services.dart';
+// import 'package:flutter/services.dart' show rootBundle;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -703,21 +703,14 @@ class ResultGraphPage extends StatelessWidget {
                           '${i + 1}コース ${members[i].originalFrame}枠 名前:${m['Name'] ?? ''} 得点率:${m['WinPointRate'] ?? ''} 複勝率:${((double.tryParse(m['WinRate12#${i + 1}'] ?? '0') ?? 0) * 100).toStringAsFixed(0)}%'
                       );
                     }
-                    // 2連単・3連単選手名
-                    // final n1 = members[0].member['Name'] ?? '';
-                    // final n2 = members[1].member['Name'] ?? '';
-                    // final n3 = members[2].member['Name'] ?? '';
-                    // final n4 = members[3].member['Name'] ?? '';
-                    // final n5 = members[4].member['Name'] ?? '';
-                    // final n6 = members[5].member['Name'] ?? '';
                     final String dialogText = [
-                      '以下の競艇出走表から、2連単、3連単を各３点予想してください。',
+                      '以下の競艇出走表から、2連単、3連単を各３点予想してください。また、穴予想もお願いします。',
                       ...table,
                       '',
                     ].join('\n');
 
                     return AlertDialog(
-                      title: Text('以下の競艇出走表から、2連単、3連単を各３点予想してください。'),
+                      title: Text('AIプロンプト'),
                       content: SingleChildScrollView(
                         child: SelectableText(dialogText), // 選択も可能
                       ),
@@ -741,7 +734,6 @@ class ResultGraphPage extends StatelessWidget {
                 );
               },
             ),
-
             SizedBox(height: 40),
             Text('スタートタイミング'),
             Container(
@@ -1095,14 +1087,21 @@ class _MemberDetailPageState extends State<MemberDetailPage> {
                   )
                   : Column(
                     children: [
-                      if (_displayMember?['Photo'] != null &&
-                          _displayMember?['Photo'].isNotEmpty)
-                        Image.network(
-                          _displayMember!['Photo'],
-                          width: 120,
-                          height: 120,
-                          fit: BoxFit.cover,
-                        ),
+                      Image.network(
+                        _displayMember?['Photo'],
+                        width: 120,
+                        height: 120,
+                        fit: BoxFit.cover,
+                      ),
+
+                      // if (_displayMember?['Photo'] != null &&
+                      //     _displayMember?['Photo'].isNotEmpty)
+                      //   Image.network(
+                      //     _displayMember?['Photo'],
+                      //     width: 120,
+                      //     height: 120,
+                      //     fit: BoxFit.cover,
+                      //   ),
                       SizedBox(height: 20),
                       // --- 詳細テーブル1 ---
                       Table(
