@@ -460,25 +460,7 @@ class _MemberSearchPageState extends State<MemberSearchPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Row(
-              children: [
-                Expanded(
-                  flex: 2,
-                  child: TextField(
-                    controller: _codeController,
-                    decoration: InputDecoration(labelText: '登録番号'),
-                  ),
-                ),
-                SizedBox(width: 16),
-                Expanded(
-                  flex: 2,
-                  child: TextField(
-                    controller: _nameController,
-                    decoration: InputDecoration(labelText: '氏名（ひらがな）'),
-                  ),
-                ),
-              ],
-            ),
+
             Row(
               children: [
                 Expanded(
@@ -569,6 +551,25 @@ class _MemberSearchPageState extends State<MemberSearchPage> {
                         });
                       },
                     ),
+                  ),
+                ),
+              ],
+            ),
+            Row(
+              children: [
+                Expanded(
+                  flex: 2,
+                  child: TextField(
+                    controller: _codeController,
+                    decoration: InputDecoration(labelText: '登録番号'),
+                  ),
+                ),
+                SizedBox(width: 16),
+                Expanded(
+                  flex: 2,
+                  child: TextField(
+                    controller: _nameController,
+                    decoration: InputDecoration(labelText: '氏名（ひらがな）'),
                   ),
                 ),
               ],
