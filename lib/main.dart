@@ -645,27 +645,6 @@ class _MemberSearchPageState extends State<MemberSearchPage> {
                     ),
                   ),
                 ),
-                // Expanded(
-                //   flex: 2,
-                //   child: Padding(
-                //     padding: const EdgeInsets.all(8.0), // ★ここを追加
-                //     child: TextField(
-                //       controller: _codeController,
-                //       decoration: InputDecoration(labelText: '登録番号'),
-                //     ),
-                //   ),
-                // ),
-                // SizedBox(width: 16),
-                // Expanded(
-                //   flex: 2,
-                //   child: Padding(
-                //     padding: const EdgeInsets.all(8.0), // ★ここを追加
-                //     child: TextField(
-                //       controller: _nameController,
-                //       decoration: InputDecoration(labelText: '氏名（ひらがな）'),
-                //     ),
-                //   ),
-                // ),
               ],
             ),
             Padding(
@@ -800,8 +779,16 @@ class ResultGraphPage extends StatelessWidget {
                     for (int i = 0; i < 6; i++) {
                       final m = members[i].member;
                       table.add(
-                        '${i + 1}コース ${members[i].originalFrame}枠 名前:${m['Name'] ?? ''} 得点率:${m['WinPointRate'] ?? ''} 複勝率:${((double.tryParse(m['WinRate12#${i + 1}'] ?? '0') ?? 0) * 100).toStringAsFixed(0)}%',
+                        '${i + 1}コース '
+                        '${members[i].originalFrame}枠 '
+                        '名前:${m['Name'] ?? ''} '
+                        '得点率:${m['WinPointRate'] ?? ''} '
+                        '複勝率:${((double.tryParse(m['WinRate12#${i + 1}'] ?? '0') ?? 0) * 100).toStringAsFixed(0)}% '
+                        'スタートタイミング:${m['StartTime#${i + 1}'] ?? ''}',
                       );
+                      // table.add(
+                      //   '${i + 1}コース ${members[i].originalFrame}枠 名前:${m['Name'] ?? ''} 得点率:${m['WinPointRate'] ?? ''} 複勝率:${((double.tryParse(m['WinRate12#${i + 1}'] ?? '0') ?? 0) * 100).toStringAsFixed(0)}%',
+                      // );
                     }
                     final String dialogText = [
                       '以下の競艇出走表から、2連単、3連単を各３点予想してください。また、穴予想もお願いします。',
