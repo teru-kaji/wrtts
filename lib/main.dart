@@ -780,7 +780,7 @@ class ResultGraphPage extends StatelessWidget {
                       final m = members[i].member;
                       table.add(
                         '${i + 1}コース '
-                        '${members[i].originalFrame}枠 '
+                        '${members[i].originalFrame}号艇 '
                         '名前:${m['Name'] ?? ''} '
                         '得点率:${m['WinPointRate'] ?? ''} '
                         '複勝率:${((double.tryParse(m['WinRate12#${i + 1}'] ?? '0') ?? 0) * 100).toStringAsFixed(0)}% '
