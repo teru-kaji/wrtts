@@ -593,12 +593,14 @@ class _MemberSearchPageState extends State<MemberSearchPage> {
                     padding: const EdgeInsets.all(8.0),
                     child: TextField(
                       controller: _codeController,
+                      keyboardType: TextInputType.number, // ← 数字キーボード
+                      inputFormatters: [FilteringTextInputFormatter.digitsOnly], // ← 数字のみ
+                      textInputAction: TextInputAction.search, // ← IMEのアクションを検索に
+                      onSubmitted: (_) => _searchMembers(),   // ← Enter/決定で検索実行
                       decoration: InputDecoration(
                         labelText: '登録番号',
                         border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(
-                            16.0,
-                          ), // ←ここで角丸半径指定
+                          borderRadius: BorderRadius.circular(16.0),
                         ),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(16.0),
@@ -608,10 +610,7 @@ class _MemberSearchPageState extends State<MemberSearchPage> {
                           borderRadius: BorderRadius.circular(16.0),
                           borderSide: BorderSide(color: Colors.blue, width: 2),
                         ),
-                        contentPadding: EdgeInsets.symmetric(
-                          vertical: 16,
-                          horizontal: 8,
-                        ),
+                        contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 8),
                       ),
                     ),
                   ),
