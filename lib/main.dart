@@ -332,7 +332,7 @@ class _MemberSearchPageState extends State<MemberSearchPage> {
   final TextEditingController _codeController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
   String? _selectedGender;
-  String? _selectedDataTime = '20252';
+  String? _selectedDataTime = '20261';
   String? _selectedRank;
 
   final List<Map<String, String>> _genderList = [
@@ -340,7 +340,7 @@ class _MemberSearchPageState extends State<MemberSearchPage> {
     {'label': '男性', 'value': '1'},
     {'label': '女性', 'value': '2'},
   ];
-  final List<String> _dataTimeList = ['', '20252', '20251', '20021'];
+  final List<String> _dataTimeList = ['', '20261' ];
   final List<String> _rankList = ['', 'A1', 'A2', 'B1', 'B2'];
 
   List<Map<String, dynamic>> _members = [];
